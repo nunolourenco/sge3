@@ -1,0 +1,6 @@
+#core
+<start> ::= <expr>
+<expr> ::= <expr><op><expr>|(<expr><op><expr>)|<pre_op>(<expr>)|<var>
+<op> ::= +|-|*|\eb_div_\eb
+<pre_op> ::= sin|cos|_exp_|_log_|_inv_
+<var> ::= x[0]|x[1]|x[2]|x[3]|x[4]|x[5]|x[6]|x[7]|x[8]|x[9]|x[10]|x[11]|x[12]|1.0

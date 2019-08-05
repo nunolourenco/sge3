@@ -1,0 +1,3 @@
+<start> ::= <B>
+<B> ::= <B> and <B>|<B> or <B>|not(<B> and <B>)|not(<B> or <B>)|<var>
+<var> ::= b0|b1|b2|b3|b4
