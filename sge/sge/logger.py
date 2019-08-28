@@ -1,31 +1,41 @@
 import numpy as np
-import json
-from parameters import params
-import os
+from sge.parameters import params
+from sge.utilities.run_info_orm import Base, EvolutionaryRun, PopulationSample, Parameters
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy import create_engine
+
+
+engine = create_engine('sqlite:///%s.db' % params['EXPERIMENT_NAME'])
+DBSession = sessionmaker(bind=engine)
+session = DBSession()
 
 
 def evolution_progress(generation, pop):
     fitness_samples = [i['fitness'] for i in pop]
-    data = '%s\t%s\t%s\t%s' % (generation, np.min(fitness_samples), np.mean(fitness_samples), np.std(fitness_samples))
+    new_generation = EvolutionaryRun(run=params['RUN'], generation=generation, best_fitness=np.min(fitness_samples),
+                                     mean_fitness=np.mean(fitness_samples),std_fitness=np.std(fitness_samples))
+    session.add(new_generation)
+    session.commit()
     if params['VERBOSE']:
-        print(data)
-    save_progress_to_file(data)
+        print(new_generation)
     if generation % params['SAVE_STEP'] == 0:
         save_step(generation, pop)
 
 
-def save_progress_to_file(data):
-    with open('%s/run_%d/progress_report.csv' % (params['EXPERIMENT_NAME'], params['RUN']), 'w') as f:
-        f.write(data + '\n')
-
-
 def save_step(generation, population):
-    c = json.dumps(population)
-    open('%s/run_%d/iteration_%d.json' % (params['EXPERIMENT_NAME'], params['RUN'], generation), 'w').write(c)
+    pop_dump = PopulationSample(run=params['RUN'], generation=generation,population=population)
+    session.add(pop_dump)
+    session.commit()
+
+
+def save_parameters():
+    params_lower = dict((k.lower(), v) for k, v in params.items())
+    new_parameters = Parameters(**params_lower)
+    session.add(new_parameters)
+    session.commit()
 
 
 def prepare_dumps():
-    try:
-        os.makedirs('%s/run_%d' % (params['EXPERIMENT_NAME'], params['RUN']))
-    except FileExistsError as e:
-        pass
+    Base.metadata.create_all(engine)
+    Base.metadata.bind = engine
+    save_parameters()

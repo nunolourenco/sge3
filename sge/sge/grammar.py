@@ -1,6 +1,6 @@
 import re
 import random
-from utilities import ordered_set
+from sge.utilities import ordered_set
 
 
 class Grammar:
@@ -136,8 +136,7 @@ class Grammar:
         output = []
         max_depth = self._recursive_mapping(mapping_rules, positions_to_map, self.start_rule, 0, output)
         output = "".join(output)
-        if needs_python_filter:
-            output = self.python_filter(output)
+        output = self.python_filter(output)
         return output, max_depth
 
     def _recursive_mapping(self, mapping_rules, positions_to_map, current_sym, current_depth, output):

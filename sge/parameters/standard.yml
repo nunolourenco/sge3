@@ -1,9 +1,9 @@
-POPSIZE: 100
-GENERATIONS: 10
-ELITISM: 12                    # number of individuals that survive
-SEED: 25
+POPSIZE: 1000
+GENERATIONS: 50
+ELITISM: 10                    # number of individuals that survive
+SEED: 42
 PROB_CROSSOVER: 0.9
-PROB_MUTATION: 0.05
+PROB_MUTATION: 0.1
 TSIZE: 3
 GRAMMAR: 'grammars/regression.txt'
 EXPERIMENT_NAME: 'dumps/Test'

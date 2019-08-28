@@ -1,11 +1,11 @@
-import grammar
+import sge.grammar as grammar
 import random
-import logger
+import sge.logger as logger
 import sys
 from sge.operators.recombination import crossover
 from sge.operators.mutation import mutate
 from sge.operators.selection import tournament
-from parameters import (
+from sge.parameters import (
     params,
     set_parameters
 )

@@ -88,12 +88,12 @@ def set_parameters(arguments):
                         type=int,  # TODO check limits
                         help='Specifies how often stats are saved')
     parser.add_argument('--verbose',
-                        dest='SAVE_STEP',
-                        type=int,  # TODO check limits
+                        dest='VERBOSE',
+                        type=bool,  # TODO check limits
                         help='Turns on the verbose output of the program')
 
     # Parse command line arguments using all above information.
-    args, unknown = parser.parse_known_args(arguments)
+    args, _ = parser.parse_known_args(arguments)
 
     # All default args in the parser are set to "None". Only take arguments
     # which are not "None", i.e. arguments which have been passed in from
@@ -109,7 +109,7 @@ def set_parameters(arguments):
             # Allow for people not using correct capitalisation.
             cmd_args[key] = None
 
+    if 'PARAMETERS' in cmd_args:
+        load_parameters(cmd_args['PARAMETERS'])
     params.update(cmd_args)
-    if params['PARAMETERS'] is not None:
-        load_parameters(params['PARAMETERS'])
 

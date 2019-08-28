@@ -1,6 +1,6 @@
 import copy
 import random
-import grammar
+import sge.grammar as grammar
 
 
 def mutate(p, pmutation):

@@ -1,4 +1,4 @@
-from engine import *
+from .engine import *
 from .operators.recombination import *
 from .operators.mutation import *
 from .utilities.protected_math import *
