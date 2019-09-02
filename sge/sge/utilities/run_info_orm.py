@@ -14,7 +14,7 @@ class EvolutionaryRun(Base):
     std_fitness = Column(Float)
 
     def __repr__(self):
-        return '%4d\t%5.6f\t%5.6f\t%5.6f' % (self.generation, self.best_fitness, self.mean_fitness, self.std_fitness)
+        return '%4d\t%.6e\t%.6e\t%.6e' % (self.generation, self.best_fitness, self.mean_fitness, self.std_fitness)
 
 
 class PopulationSample(Base):

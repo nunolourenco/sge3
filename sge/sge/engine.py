@@ -1,7 +1,8 @@
-import sge.grammar as grammar
 import random
-import sge.logger as logger
 import sys
+import sge.grammar as grammar
+import sge.logger as logger
+from datetime import datetime
 from sge.operators.recombination import crossover
 from sge.operators.mutation import mutate
 from sge.operators.selection import tournament
@@ -35,6 +36,8 @@ def evaluate(ind, eval_func):
 
 def setup():
     set_parameters(sys.argv[1:])
+    if params['SEED'] is None:
+        params['SEED'] = int(datetime.now().microsecond)
     logger.prepare_dumps()
     random.seed(params['SEED'])
     grammar.set_path(params['GRAMMAR'])
@@ -47,7 +50,7 @@ def evolutionary_algorithm(evaluation_function=None):
     setup()
     population = list(make_initial_population())
     it = 0
-    while it < params['GENERATIONS']:
+    while it <= params['GENERATIONS']:
         for i in population:
             if i['fitness'] is None:
                 evaluate(i, evaluation_function)

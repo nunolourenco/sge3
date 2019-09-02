@@ -6,7 +6,7 @@ params = {'PARAMETERS': None,
           'POPSIZE': 10,
           'GENERATIONS': 10,
           'ELITISM': 10,                    # number of individuals that survive
-          'SEED': 42,
+          'SEED': None,
           'PROB_CROSSOVER': 0.9,
           'PROB_MUTATION': 0.1,
           'TSIZE': 3,
@@ -45,51 +45,51 @@ def set_parameters(arguments):
                         help='Specifies the population size.')
     parser.add_argument('--generations',
                         dest='GENERATIONS',
-                        type=float, #TODO check limits
+                        type=float,
                         help='Specifies the total number of generations.')
     parser.add_argument('--elitism',
                         dest='ELITISM',
-                        type=int,  # TODO check limits
+                        type=int,
                         help='Specifies the total number of individuals that should survive in each generation.')
     parser.add_argument('--seed',
                         dest='SEED',
-                        type=float, #TODO check limits
+                        type=float,
                         help='Specifies the seed to be used by the random number generator.')
     parser.add_argument('--prob_crossover',
                         dest='PROB_CROSSOVER',
-                        type=float,  #TODO check limits
+                        type=float,
                         help='Specifies the probability of crossover usage. Float required')
     parser.add_argument('--prob_mutation',
                         dest='PROB_MUTATION',
-                        type=float,  # TODO check limits
+                        type=float,
                         help='Specifies the probability of mutation usage. Float required')
     parser.add_argument('--tsize',
                         dest='TSIZE',
-                        type=int,  # TODO check limits
+                        type=int,
                         help='Specifies the tournament size for parent selection.')
     parser.add_argument('--grammar',
                         dest='GRAMMAR',
-                        type=str,  # TODO check limits
+                        type=str,
                         help='Specifies the path to the grammar file.')
     parser.add_argument('--experiment_name',
                         dest='EXPERIMENT_NAME',
-                        type=str,  # TODO check limits
+                        type=str,
                         help='Specifies the name of the folder where stats are going to be stored')
     parser.add_argument('--run',
                         dest='RUN',
-                        type=int,  # TODO check limits
+                        type=int,
                         help='Specifies the run number.')
     parser.add_argument('--include_genotype',
                         dest='INCLUDE_GENOTYPE',
-                        type=bool,  # TODO check limits
+                        type=bool,
                         help='Specifies if the genotype is to be include in the log files.')
     parser.add_argument('--save_step',
                         dest='SAVE_STEP',
-                        type=int,  # TODO check limits
+                        type=int,
                         help='Specifies how often stats are saved')
     parser.add_argument('--verbose',
                         dest='VERBOSE',
-                        type=bool,  # TODO check limits
+                        type=bool,
                         help='Turns on the verbose output of the program')
 
     # Parse command line arguments using all above information.

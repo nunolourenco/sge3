@@ -15,7 +15,7 @@ def evolution_progress(generation, pop):
     new_generation = EvolutionaryRun(run=params['RUN'], generation=generation, best_fitness=np.min(fitness_samples),
                                      mean_fitness=np.mean(fitness_samples),std_fitness=np.std(fitness_samples))
     session.add(new_generation)
-    session.commit()
+    session.cpythonommit()
     if params['VERBOSE']:
         print(new_generation)
     if generation % params['SAVE_STEP'] == 0:
