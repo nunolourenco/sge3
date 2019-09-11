@@ -37,6 +37,7 @@ class ProgSys():
         
         program = self.format_program(ind,
                                       self.embed_header, self.embed_footer)
+        print(program)
         data = self.training if dist == "training" else self.test
         program = "{}\n{}\n".format(data, program)
         eval_json = json.dumps({'script': program, 'timeout': 1.0,
@@ -75,7 +76,12 @@ class ProgSys():
     def format_individual(self, code, additional_indent=""):
         """format individual by adding appropriate indentation and loop break
         statements"""
-        parts = code.split('\n')
+        code = code.replace("\le", "<=")
+        code = code.replace("\ge", ">=")
+        code = code.replace("\l", "<")
+        code = code.replace("\g", ">")
+        code = code.replace("\eb", "|")
+        parts = code.split('\\n')
         indent = 0
         string_builder = ""
         for_counter_number = 0
