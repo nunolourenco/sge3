@@ -1,0 +1,28 @@
+<predefined> ::= 'b0 = bool(); b1 = bool(); b2 = bool()'
+'i0 = int(); i1 = int(); i2 = int()'
+'s0 = str(); s1 = str(); s2 = str()'
+'res0 = str()'
+<code>
+<code> ::= <code><statement>'\n'|<statement>'\n'
+<statement> ::= <assign>|<compound_stmt>
+<compound_stmt> ::= <if>|'loopBreak% = 0\nwhile '<bool>':{:\n'<code>'\nif loopBreak% > loopBreakConst or stop.value:{:\nbreak\n:}loopBreak% += 1\n:}'
+<assign> ::= <bool_var>' = '<bool>|<int_assign>|<string_var>' = '<string>
+<number> ::= <number><num>|<num>
+<num> ::= '0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9'
+<comp_op> ::= '<'|'>'|'=='|'>='|'<='|'!='|'is'|'is not'
+<string_const_part> ::= <string_const_part><string_literal>|<string_literal>
+<bool_var> ::= 'b0'|'b1'|'b2'
+<bool> ::= <bool_var>|<bool_const>|'not '<bool>|'( '<bool>' '<bool_op>' '<bool>' )'|<int>' '<comp_op>' '<int>|<string>' in '<string>|<string>' not in '<string>|<string>' == '<string>|<string>' != '<string>|<string>'.startswith('<string>')'|<string>'.endswith('<string>')'
+<bool_op> ::= 'and'|'or'
+<bool_const> ::= 'True'|'False'
+<if> ::= 'if '<bool>':{:\n'<code>':}'|'if '<bool>':{:\n'<code>':}else:{:\n'<code>':}'
+<int_var> ::= 'i0'|'i1'|'i2'
+<int_assign> ::= <int_var>' = '<int>|<int_var>' '<arith_ops>'= '<int>
+<int> ::= <int_var>|'int('<number>'.0)'|<arith_prefix><int>|'( '<int>' '<arith_ops>' '<int>' )'|<int_arith_ops_protected>'('<int>','<int>')'|'min('<int>', '<int>')'|'max('<int>', '<int>')'|'abs('<int>')'|'len('<string>')'|'saveOrd('<string>')'
+<arith_ops> ::= '+'|'-'|'*'
+<int_arith_ops_protected> ::= 'divInt'|'mod'
+<arith_prefix> ::= '+'|'-'
+<string_var> ::= 's0'|'s1'|'s2'|'res0'|'in0'
+<string> ::= <string_var>|"'"<string_const_part>"'"|<string_slice>|'getCharFromString('<string>', '<int>')'|'saveChr('<int>')'|'('<string>' + '<string>')'|<string>'.lstrip()'|<string>'.rstrip()'|<string>'.strip()'|<string>'.lstrip('<string>')'|<string>'.rstrip('<string>')'|<string>'.strip('<string>')'|<string>'.capitalize()'
+<string_slice> ::= <string>'['<int>':'<int>']'|<string>'[:'<int>']'|<string>'['<int>':]'
+<string_literal> ::= ''|'\\\n'|'\\\t'|' '|'!'|'"'|'#'|'$'|'%'|'&'|"\\'"|'('|')'|'*'|'+'|','|'-'|'.'|'/'|'0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9'|':'|';'|'<'|'='|'>'|'?'|'@'|'A'|'B'|'C'|'D'|'E'|'F'|'G'|'H'|'I'|'J'|'K'|'L'|'M'|'N'|'O'|'P'|'Q'|'R'|'S'|'T'|'U'|'V'|'W'|'X'|'Y'|'Z'|'['|'\\\\'|']'|'^'|'_'|'`'|'a'|'b'|'c'|'d'|'e'|'f'|'g'|'h'|'i'|'j'|'k'|'l'|'m'|'n'|'o'|'p'|'q'|'r'|'s'|'t'|'u'|'v'|'w'|'x'|'y'|'z'|'{'|'|'|'}'

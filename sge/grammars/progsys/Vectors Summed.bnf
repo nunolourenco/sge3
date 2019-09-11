@@ -1,0 +1,21 @@
+<predefined> ::= 'i0 = int(); i1 = int(); i2 = int()'
+'li0 = []; li1 = []; li2 = []'
+'res0 = []'
+<code>
+<code> ::= <code><statement>'\n'|<statement>'\n'
+<statement> ::= <simple_stmt>|<for>
+<simple_stmt> ::= <call>|<assign>
+<call> ::= <list_int_var>'.append('<int>')'|<list_int_var>'.insert('<int>','<int>')'|'deleteListItem('<list_int>', '<int>')'|'setListIndexTo('<list_int>', '<int>', '<int>')'
+<assign> ::= <int_assign>|<list_int_var>' = '<list_int>
+<for> ::= 'loopBreak% = 0\nfor forCounter% in '<list_int>':{:\n'<code>'\nif loopBreak% > loopBreakConst or stop.value:{:\nbreak\n:}loopBreak% += 1\n:}'|'loopBreak% = 0\nfor '<int_var>' in '<list_int>':{:\n'<code>'\nif loopBreak% > loopBreakConst or stop.value:{:\nbreak\n:}loopBreak% += 1\n:}'
+<number> ::= <number><num>|<num>
+<num> ::= '0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9'
+<int_var> ::= 'i0'|'i1'|'i2'
+<int_assign> ::= <int_var>' = '<int>|<int_var>' '<arith_ops>'= '<int>
+<int> ::= <int_var>|'int('<number>'.0)'|<arith_prefix><int>|'( '<int>' '<arith_ops>' '<int>' )'|<int_arith_ops_protected>'('<int>','<int>')'|'min('<int>', '<int>')'|'max('<int>', '<int>')'|'abs('<int>')'|'getIndexIntList('<list_int>', '<int>')'|'len('<list_int>')'
+<arith_ops> ::= '+'|'-'|'*'
+<int_arith_ops_protected> ::= 'divInt'|'mod'
+<arith_prefix> ::= '+'|'-'
+<list_int_var> ::= 'li0'|'li1'|'li2'|'res0'|'in0'|'in1'
+<list_int> ::= <list_int_var>|'list(saveRange('<int>','<int>'))'|<list_int_slice>
+<list_int_slice> ::= <list_int>'['<int>':'<int>']'|<list_int>'[:'<int>']'|<list_int>'['<int>':]'
