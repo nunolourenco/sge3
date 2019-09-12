@@ -136,7 +136,8 @@ class Grammar:
         output = []
         max_depth = self._recursive_mapping(mapping_rules, positions_to_map, self.start_rule, 0, output)
         output = "".join(output)
-        output = self.python_filter(output)
+        if self.grammar_file.endswith("pybnf"):
+            output = self.python_filter(output)
         return output, max_depth
 
     def _recursive_mapping(self, mapping_rules, positions_to_map, current_sym, current_depth, output):
