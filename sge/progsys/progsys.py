@@ -37,13 +37,11 @@ class ProgSys():
         
         program = self.format_program(ind,
                                       self.embed_header, self.embed_footer)
-        print(program)
         data = self.training if dist == "training" else self.test
         program = "{}\n{}\n".format(data, program)
         eval_json = json.dumps({'script': program, 'timeout': 1.0,
                                 'variables': ['cases', 'caseQuality',
                                               'quality']})
-
         self.eval.stdin.write((eval_json+'\n').encode())
         self.eval.stdin.flush()
         result_json = self.eval.stdout.readline()
@@ -61,7 +59,7 @@ class ProgSys():
     @staticmethod
     def create_eval_process():
         """create separate python process for evaluation"""
-        return subprocess.Popen(['python',
+        return subprocess.Popen(['python3.7',
                                  'progsys/scripts/python_script_evaluation.py'],
                                 stdout=subprocess.PIPE,
                                 stdin=subprocess.PIPE)
