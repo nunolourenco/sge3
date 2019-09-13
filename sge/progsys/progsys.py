@@ -37,7 +37,6 @@ class ProgSys():
         
         program = self.format_program(ind,
                                       self.embed_header, self.embed_footer)
-        print(program)
         data = self.training if dist == "training" else self.test
         program = "{}\n{}\n".format(data, program)
         eval_json = json.dumps({'script': program, 'timeout': 1.0,

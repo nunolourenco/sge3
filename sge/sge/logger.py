@@ -5,9 +5,9 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
 
 
-engine = create_engine('sqlite:///%s.db' % params['EXPERIMENT_NAME'])
-DBSession = sessionmaker(bind=engine)
-session = DBSession()
+engine = None
+DBSession = None
+session = None
 
 
 def evolution_progress(generation, pop):
@@ -36,6 +36,12 @@ def save_parameters():
 
 
 def prepare_dumps():
+    global engine
+    global DBSession
+    global session
+    engine = create_engine('sqlite:///%s.db' % params['EXPERIMENT_NAME'])
+    DBSession = sessionmaker(bind=engine)
+    session = DBSession()
     Base.metadata.create_all(engine)
     Base.metadata.bind = engine
     save_parameters()
