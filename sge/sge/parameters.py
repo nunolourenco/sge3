@@ -54,7 +54,8 @@ def set_parameters(arguments):
     parser.add_argument('--seed',
                         dest='SEED',
                         type=float,
-                        help='Specifies the seed to be used by the random number generator.')
+                        help='Specifies the seed to be used by the random number generator. If no Seed is given it '
+                             'will be initialized as: int(datetime.now().microsecond)')
     parser.add_argument('--prob_crossover',
                         dest='PROB_CROSSOVER',
                         type=float,
