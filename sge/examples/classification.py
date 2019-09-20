@@ -15,6 +15,7 @@ class BinaryClassification:
         self.__invalid_fitness = invalid_fitness
         self.__dataset_name = dataset_name
         self.read_dataset(dataset_name)
+        self.number_instances_per_class()
 
     def read_dataset(self, name):
         if name == 'adult-income':
@@ -34,11 +35,13 @@ class BinaryClassification:
         self.__train_set = dataset.data.drop(index=test_idx).values
         self.__test_set = dataset.data.loc[test_idx, :].values
 
-    def get_error(self, individual, dataset):
-        number_cases_per_class = Counter(dataset[:, -1])
+    def number_instances_per_class(self):
+        self.__nc_train = Counter(self.__train_set[:, -1])
+        self.__nc_test = Counter(self.__test_set[:, -1])
 
+    def get_error(self, individual, dataset, nc):
         pred_error_per_class = dict()
-        for c in number_cases_per_class.keys():
+        for c in nc.keys():
             pred_error_per_class[c] = 0.0
 
         for fit_case in dataset:
@@ -50,8 +53,8 @@ class BinaryClassification:
                 return self.__invalid_fitness
 
         pred_error = 1.0
-        for c in number_cases_per_class.keys():
-            pred_error *= exp(sqrt(pred_error_per_class[c] / number_cases_per_class[c]))
+        for c in nc.keys():
+            pred_error *= exp(sqrt(pred_error_per_class[c] / nc[c]))
 
         return pred_error
 
@@ -59,13 +62,13 @@ class BinaryClassification:
         if individual is None:
             return None
 
-        train_error = self.get_error(individual, self.__train_set)
-        test_error = self.get_error(individual, self.__test_set)
+        train_error = self.get_error(individual, self.__train_set, self.__nc_train)
+        test_error = self.get_error(individual, self.__test_set, self.__nc_test)
 
         return train_error, {'generation': 0, "evals": 1, "test_error": test_error}
 
 
 if __name__ == "__main__":
     import sge
-    eval_func = BinaryClassification(dataset_name='german-credit')
+    eval_func = BinaryClassification(dataset_name='compas')
     sge.evolutionary_algorithm(evaluation_function=eval_func)
