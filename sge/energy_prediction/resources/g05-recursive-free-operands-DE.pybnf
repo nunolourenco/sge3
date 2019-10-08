@@ -1,0 +1,19 @@
+# Grammar for the estimation of energy
+
+# Model has as many elements as input variables, but for sure they all will not be repeated.
+<func> ::= w[0]<op><recExpr>
+
+
+# Expressions
+<recExpr> ::= <expr>|<expr><op><recExpr>
+
+<expr> ::= <param><op><var>|<param><op>(<var>)**(<param>)|_exp_(abs(<param><op><var>))|_log_(abs(<param><op><var>))
+
+# Parameters
+<param> ::= w[1]|w[2]|w[3]|w[4]|w[5]|w[6]|w[8]|w[9]|w[10]|w[11]|w[12]|w[13]|w[14]
+
+# Input variables
+<var> ::= x[1]|x[2]|x[3]|x[4]|x[5]|x[6]|x[8]|x[9]|x[10]|x[11]|x[12]|x[13]|x[14]
+
+# Operands
+<op> ::= +|-|*
