@@ -37,8 +37,8 @@ class EnergyPrediction:
 
         def optimise_params(w):
             predicted = np.apply_along_axis(function, 0, dataset, w)
-            pred_error = np.sum(np.power(predicted - dataset[:, 0], 2))
-            return pred_error
+            pred_error = np.sum(np.abs(predicted - dataset[:, 0]) * 100 / dataset[:, 0])
+            return pred_error / predicted.size
 
         result = optimize.differential_evolution(optimise_params, bounds=[(-1, 1) for i in range(15)], maxiter=10)
         return result.fun, result.x
