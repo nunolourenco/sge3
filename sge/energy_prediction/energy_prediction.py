@@ -48,14 +48,12 @@ class EnergyPrediction:
             return None
 
         error, weights = self.get_error(individual, self.__train_set)
-        error = _sqrt_(error / len(self.__train_set))
 
         if error is None:
             error = self.__invalid_fitness
 
         if self.test_set_file is not None:
             test_error, weights = self.get_error(individual, self.__test_set)
-            test_error = _sqrt_(test_error / float(len(self.__test_set)))
 
         return error, {'generation': 0, "evals": 1, "test_error": test_error, "weigths": list(weights)}
 
