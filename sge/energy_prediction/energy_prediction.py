@@ -56,10 +56,9 @@ class EnergyPrediction:
             pred_error = np.mean(np.abs(_percentage_error(actual, predicted)))
             return pred_error
 
-        # result = optimize.differential_evolution(optimise_params, bounds=[(0, 1) for i in range(15)], maxiter=100,
-        #                                        disp=True, popsize=75, mutation=0.4717, recombination=0.8803)
-        result = optimize.differential_evolution(optimise_params, bounds=[(0, 1) for i in range(15)], maxiter=10,
-                                                 mutation=0.4717, recombination=0.8803)
+        result = optimize.differential_evolution(optimise_params, bounds=[(0, 1) for i in range(15)], maxiter=100, popsize=75, mutation=0.4717, recombination=0.8803)
+        # result = optimize.differential_evolution(optimise_params, bounds=[(0, 1) for i in range(15)], maxiter=10,
+        #                                         mutation=0.4717, recombination=0.8803)
         return result.fun, result.x
 
     def evaluate(self, individual):
