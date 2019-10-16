@@ -53,13 +53,13 @@ class EnergyPrediction:
 
         def optimise_params(w):
             predicted = np.apply_along_axis(function, 0, dataset, w)
-            pred_error = np.mean(_percentage_error(actual, predicted))
+            pred_error = np.sum(np.abs(_error(actual, predicted)))
             return pred_error
 
         # result = optimize.differential_evolution(optimise_params, bounds=[(0, 1) for i in range(15)], maxiter=100,
         #                                        disp=True, popsize=75, mutation=0.4717, recombination=0.8803)
         result = optimize.differential_evolution(optimise_params, bounds=[(-1, 1) for i in range(15)], maxiter=100,
-                                                 mutation=0.4717, recombination=0.8803, tol=0.00001)
+                                                 mutation=0.4717, recombination=0.8803)
         return result.fun, result.x
 
     def evaluate(self, individual):
