@@ -62,17 +62,23 @@ class EnergyPrediction:
                                                  mutation=0.4717, recombination=0.8803)
         return result.fun, result.x
 
+    def get_test_error(self, individual, dataset, weights):
+        function = eval("lambda x, w: %s" % individual)
+        actual = dataset[:, 0]
+        predicted = np.apply_along_axis(function, 0, dataset, weights)
+        pred_error = np.sum(np.abs(_error(actual, predicted)))
+        return pred_error
+
     def evaluate(self, individual):
         if individual is None:
             return None
-
         error, weights = self.get_error(individual, self.__train_set)
 
         if error is None:
             error = self.__invalid_fitness
 
         if self.test_set_file is not None:
-            test_error, weights = self.get_error(individual, self.__test_set)
+            test_error = self.get_test_error(individual, self.__test_set, weights)
 
         return error, {'generation': 0, "evals": 1, "test_error": test_error, "weigths": list(weights)}
 
