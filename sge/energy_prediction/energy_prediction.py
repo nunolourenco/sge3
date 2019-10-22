@@ -59,7 +59,7 @@ class EnergyPrediction:
         # result = optimize.differential_evolution(optimise_params, bounds=[(0, 1) for i in range(15)], maxiter=100,
         #                                        disp=True, popsize=75, mutation=0.4717, recombination=0.8803)
         result = optimize.differential_evolution(optimise_params, bounds=[(-1, 1) for i in range(15)], maxiter=100,
-                                                 mutation=0.4717, recombination=0.8803, strategy='rand1bin')
+                                                 popsize=75, mutation=0.4717, recombination=0.8803, strategy='rand1bin')
         # de = yabox.DE(optimise_params, [(-1, 1) for i in range(15)], mutation=0.4717, crossover=0.8803, maxiters=100,
         #               popsize=10)
         # w, f = de.solve(show_progress=False)
