@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 from math import sin, cos, tan
 from sge.utilities.protected_math import _log_, _div_, _exp_, _inv_, _sqrt_, protdiv
-from scipy import optimize
+import yabox
 
 
 def drange(start, stop, step):
@@ -58,9 +58,12 @@ class EnergyPrediction:
 
         # result = optimize.differential_evolution(optimise_params, bounds=[(0, 1) for i in range(15)], maxiter=100,
         #                                        disp=True, popsize=75, mutation=0.4717, recombination=0.8803)
-        result = optimize.differential_evolution(optimise_params, bounds=[(-1, 1) for i in range(15)], maxiter=100,
-                                                 mutation=0.4717, recombination=0.8803)
-        return result.fun, result.x
+        # result = optimize.differential_evolution(optimise_params, bounds=[(-1, 1) for i in range(15)], maxiter=100,
+        #                                          mutation=0.4717, recombination=0.8803)
+        de = yabox.DE(optimise_params, [(-1, 1) for i in range(15)], mutation=0.4717, crossover=0.8803, maxiters=100,
+                      popsize=75)
+        w, f = de.solve(show_progress=True)
+        return f, w[:, 0]
 
     def get_test_error(self, individual, dataset, weights):
         function = eval("lambda x, w: %s" % individual)
