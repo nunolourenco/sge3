@@ -7,7 +7,12 @@ import os
 
 def evolution_progress(generation, pop):
     fitness_samples = [i['fitness'] for i in pop]
-    data = '%4d\t%.6e\t%.6e\t%.6e' % (generation, np.min(fitness_samples), np.mean(fitness_samples), np.std(fitness_samples))
+    data = '%4d\t%.6e\t%.6e\t%.6e' % (
+    generation, np.min(fitness_samples), np.mean(fitness_samples), np.std(fitness_samples))
+    if 'other_info' in pop[0] and 'test_error' in pop[0]['other_info']:
+        test_fitness_samples = [i['other_info']['test_error'] for i in pop]
+        data += '\t%.6e\t%.6e\t%.6e' % (np.min(test_fitness_samples), np.mean(test_fitness_samples),
+                                        np.std(test_fitness_samples))
     if params['VERBOSE']:
         print(data)
     save_progress_to_file(data)
