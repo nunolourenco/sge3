@@ -1,8 +1,8 @@
 POPSIZE: 50
 GENERATIONS: 40
 ELITISM: 5                    # number of individuals that survive
-PROB_CROSSOVER: 0.9
-PROB_MUTATION: 0.1
+PROB_CROSSOVER: 0.65
+PROB_MUTATION: 0.02
 TSIZE: 3
 GRAMMAR: 'grammars/regression.txt'
 EXPERIMENT_NAME: 'dumps/Test'
