@@ -49,20 +49,21 @@ class EnergyPrediction:
 
 
     def get_error(self, individual, dataset):
+        print(individual)
         function = eval("lambda x, w: %s" % individual)
         actual = dataset[:, 0]
 
         def optimise_params(w):
-            predicted = np.apply_along_axis(function, 0, dataset, w)
+            predicted = np.apply_along_axis(function, 1, dataset, w)
             # pred_error = np.mean(np.sqrt(np.power(_error(actual, predicted), 2)))
             pred_error = np.sum(np.abs(_error(actual, predicted)))
             return pred_error
 
         # result = optimize.differential_evolution(optimise_params, bounds=[(0, 1) for i in range(15)], maxiter=100,
         #                                        disp=True, popsize=75, mutation=0.4717, recombination=0.8803)
-        result = optimize.differential_evolution(optimise_params, bounds=[(0, 1) for i in range(15)], maxiter=100,
-                                                 popsize=100, mutation=0.4717, recombination=0.8803, disp=False,
-                                                 tol=0.001)
+        result = optimize.differential_evolution(optimise_params, bounds=[(-1, 1) for i in range(15)], maxiter=100,
+                                                 popsize=75, mutation=0.4717, recombination=0.8803, disp=True,
+                                                 tol=0.0001)
         # de = yabox.DE(optimise_params, [(0, 1) for i in range(15)], mutation=0.4717, crossover=0.8803, maxiters=100,
          #              popsize=100)
         # w, f = de.solve(show_progress=False)
@@ -72,7 +73,7 @@ class EnergyPrediction:
     def get_test_error(self, individual, dataset, weights):
         function = eval("lambda x, w: %s" % individual)
         actual = dataset[:, 0]
-        predicted = np.apply_along_axis(function, 0, dataset, weights)
+        predicted = np.apply_along_axis(function, 1, dataset, weights)
         pred_error = np.mean(np.abs(_percentage_error(actual, predicted))) * 100
         return pred_error
 
@@ -95,3 +96,4 @@ if __name__ == "__main__":
     eval_func = EnergyPrediction(training_set_file='energy_prediction/resources/Training_Data_Spain.csv',
                                  test_set_file='energy_prediction/resources/Test_Data_Spain.csv')
     sge.evolutionary_algorithm(evaluation_function=eval_func)
+
