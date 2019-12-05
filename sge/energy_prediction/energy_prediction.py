@@ -49,7 +49,6 @@ class EnergyPrediction:
 
 
     def get_error(self, individual, dataset):
-        print(individual)
         function = eval("lambda x, w: %s" % individual)
         actual = dataset[:, 0]
 
@@ -62,8 +61,7 @@ class EnergyPrediction:
         # result = optimize.differential_evolution(optimise_params, bounds=[(0, 1) for i in range(15)], maxiter=100,
         #                                        disp=True, popsize=75, mutation=0.4717, recombination=0.8803)
         result = optimize.differential_evolution(optimise_params, bounds=[(-1, 1) for i in range(15)], maxiter=100,
-                                                 popsize=75, mutation=0.4717, recombination=0.8803, disp=True,
-                                                 tol=0.0001)
+                                                 popsize=75, mutation=0.4717, recombination=0.8803, disp=False)
         # de = yabox.DE(optimise_params, [(0, 1) for i in range(15)], mutation=0.4717, crossover=0.8803, maxiters=100,
          #              popsize=100)
         # w, f = de.solve(show_progress=False)
@@ -96,4 +94,6 @@ if __name__ == "__main__":
     eval_func = EnergyPrediction(training_set_file='energy_prediction/resources/Training_Data_Spain.csv',
                                  test_set_file='energy_prediction/resources/Test_Data_Spain.csv')
     sge.evolutionary_algorithm(evaluation_function=eval_func)
-
+    # print(eval_func.evaluate('w[0]+w[10]*(x[11])**(w[6])-w[12]-(x[13])**(w[5])*w[3]*x[11]-_log_(abs(w[2]*x[
+    # 1]))*_log_('
+    #                     'abs(w[12]+x[1]))'))
