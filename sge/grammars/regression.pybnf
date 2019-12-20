@@ -1,0 +1,5 @@
+#core
+<start> ::= <expr>
+<expr> ::= <expr><op><expr>|(<expr><op><expr>)|<var>
+<op> ::= +|-|*|\eb_div_\eb
+<var> ::= x[0]|1.0

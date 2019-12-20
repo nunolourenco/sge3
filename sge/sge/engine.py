@@ -3,6 +3,7 @@ import sys
 import sge.grammar as grammar
 import sge.logger as logger
 from datetime import datetime
+from tqdm import tqdm
 from sge.operators.recombination import crossover
 from sge.operators.mutation import mutate
 from sge.operators.selection import tournament
@@ -51,7 +52,7 @@ def evolutionary_algorithm(evaluation_function=None):
     population = list(make_initial_population())
     it = 0
     while it <= params['GENERATIONS']:
-        for i in population:
+        for i in tqdm(population):
             if i['fitness'] is None:
                 evaluate(i, evaluation_function)
         population.sort(key=lambda x: x['fitness'])

@@ -21,7 +21,6 @@ class SymbolicRegression():
         self.has_test_set = has_test_set
         self.readpolynomial()
         self.calculate_rrse_denominators()
-
     def calculate_rrse_denominators(self):
         self.__RRSE_train_denominator = 0
         self.__RRSE_test_denominator = 0
