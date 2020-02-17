@@ -1,0 +1,7 @@
+#core
+<start> ::= <a>
+<a> ::= lambda pointN:(<expr>)\nlambda pointN:(<expr>)\nlambda pointN:(<expr>)
+<expr> ::= <expr><op><expr>|(<expr><op><expr>)|<var>
+<op> ::= \eb_sum_\eb|\eb_sub_\eb|\eb_mul_\eb|\eb_div_\eb|\eb_xor_\eb
+<pre_op> ::= _sin_|_cos_|_sinh_|_cosh_
+<var> ::= pointN[0]/64.0|pointN[1]/64.0|getcenterdistance(pointN, (64, 64))

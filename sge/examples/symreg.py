@@ -10,7 +10,7 @@ def drange(start, stop, step):
         r += step
 
 
-class SymbolicRegression():
+class SymbolicRegression:
     def __init__(self, function="quarticpolynomial", has_test_set=False, invalid_fitness=9999999):
         self.__train_set = []
         self.__test_set = None

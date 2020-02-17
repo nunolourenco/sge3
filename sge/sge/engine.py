@@ -24,15 +24,15 @@ def make_initial_population():
         yield generate_random_individual()
 
 
-def evaluate(ind, eval_func):
-    mapping_values = [0 for i in ind['genotype']]
-    phen, tree_depth = grammar.mapping(ind['genotype'], mapping_values)
-    quality, other_info = eval_func.evaluate(phen)
-    ind['phenotype'] = phen
-    ind['fitness'] = quality
-    ind['other_info'] = other_info
-    ind['mapping_values'] = mapping_values
-    ind['tree_depth'] = tree_depth
+def evaluate(population, eval_func):
+    for ind in population:
+        mapping_values = [0 for i in ind['genotype']]
+        phen, tree_depth = grammar.mapping(ind['genotype'], mapping_values)
+        ind['phenotype'] = phen
+        ind['mapping_values'] = mapping_values
+        ind['tree_depth'] = tree_depth
+    population = eval_func.evaluate(population)
+    return population
 
 
 def setup():
@@ -52,9 +52,8 @@ def evolutionary_algorithm(evaluation_function=None):
     population = list(make_initial_population())
     it = 0
     while it <= params['GENERATIONS']:
-        for i in tqdm(population):
-            if i['fitness'] is None:
-                evaluate(i, evaluation_function)
+
+        population = evaluate(population, evaluation_function)
         population.sort(key=lambda x: x['fitness'])
 
         logger.evolution_progress(it, population)

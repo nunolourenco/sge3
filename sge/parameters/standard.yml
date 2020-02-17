@@ -1,14 +1,15 @@
-POPSIZE: 1000
+POPSIZE: 9
 GENERATIONS: 50
-ELITISM: 100                    # number of individuals that survive
+ELITISM: 1                   # number of individuals that survive
 PROB_CROSSOVER: 0.9
-PROB_MUTATION: 0.1
+PROB_MUTATION: 0.2
 TSIZE: 3
-GRAMMAR: 'grammars/regression.pybnf'
+GRAMMAR: 'grammars/artist.pybnf'
 EXPERIMENT_NAME: 'dumps/Test'
 RUN: 1
+SEED: 1
 INCLUDE_GENOTYPE: True
 SAVE_STEP: 1
 VERBOSE: True
 MIN_TREE_DEPTH: 5
-MAX_TREE_DEPTH: 17
+MAX_TREE_DEPTH: 10
