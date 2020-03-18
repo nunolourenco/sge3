@@ -20,7 +20,7 @@ def drange(start, stop, step):
 
 
 class Artist:
-    def __init__(self, imgsize=(64, 64)):
+    def __init__(self, imgsize=(256, 256)):
         self.imgsize = imgsize
         self._running = False
         self.pause = False
@@ -38,6 +38,7 @@ class Artist:
         images = []
         for ind in tqdm(pop):
             phenotype = ind['phenotype']
+            #print(phenotype)
             r_function, g_function, b_function = phenotype.split('\n')
             x, y = np.mgrid[0:img_size[0]:(img_size[0])*1j, 0:img_size[1]:(img_size[1])*1j]
             pointN = np.vstack((x.flatten(), y.flatten())).T * 1.0
@@ -47,6 +48,9 @@ class Artist:
             r[np.where(np.isinf(r))] = 0.0
             r[np.where(np.abs(r) > 1.0)] /= 255.0
             r[np.where(np.abs(r) < 1.0)] *= 255.0
+            if r.shape[1] < 2:
+                r = np.hstack((r, np.zeros((r.shape[0], 1))))
+            r = r.mean(axis=1)
             r = np.reshape(r, img_size)
 
             g_function = eval(g_function)
@@ -55,6 +59,9 @@ class Artist:
             g[np.where(np.isinf(g))] = 0.0
             g[np.where(np.abs(g) > 1.0)] /= 255.0
             g[np.where(np.abs(g) < 1.0)] *= 255.0
+            if g.shape[1] < 2:
+                g = np.hstack((g, np.zeros((g.shape[0], 1))))
+            g = g.mean(axis=1)
             g = np.reshape(g, img_size)
 
             b_function = eval(b_function)
@@ -63,8 +70,13 @@ class Artist:
             b[np.where(np.isinf(b))] = 0.0
             b[np.where(np.abs(b) > 1.0)] /= 255.0
             b[np.where(np.abs(b) < 1.0)] *= 255.0
+            if b.shape[1] < 2:
+                b = np.hstack((b, np.zeros((b.shape[0], 1))))
+            b = b.mean(axis=1)
             b = np.reshape(b, img_size)
+
             striped = np.stack((r, g, b), axis=-1)
+            print((striped.shape))
             images.append(striped)
         return images
 
@@ -87,7 +99,7 @@ class Artist:
             blit_array(surfaces[i], images[i])
         pygame.display.flip()
 
-    def show_images(self, images, numimgs=9):
+    def show_images(self, images, numimgs=4):
         self._running = True
         size = weight, height = (int(sqrt(numimgs)) * self.imgsize[0], int(sqrt(numimgs)) * self.imgsize[1])
         self.gridsize = sqrt(numimgs)
@@ -144,7 +156,7 @@ class Artist:
         self.selected = []
         images = self.render_images(population, self.imgsize)
         print("done")
-        self.show_images(images)
+        self.show_images(images, len(population))
         while self._running and not self.pause:
             for event in pygame.event.get():
                 self.on_event(event, images, population)

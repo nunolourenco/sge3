@@ -1,5 +1,11 @@
 from math import log,exp,sqrt,sin,cos,tan, cosh, sinh
 import numpy as np
+
+distance = np.zeros((257,257))
+for i in range(257):
+  for j in range(257):
+    distance[i,j] = np.sqrt(pow(i - 128, 2) + pow(j - 128, 2)) / np.sqrt(pow(128, 2) + pow(128, 2))
+
 def _log_(x):
   if isinstance(x, list):
     for i in range(len(x)):
@@ -276,9 +282,8 @@ def gaussian(x):
 def distance_to_point(x,y,center):
   return sqrt(pow(x-center[0],2) + pow(y-center[1],2)) / sqrt(pow(center[0],2) + pow(center[1],2))
 
-def getcenterdistance(x, imgsize):
-  center = np.array([int(imgsize[0]/2.0), int(imgsize[1]/2.0)])
-  return np.linalg.norm(x-center)
+def getcenterdistance(x):
+  return distance[int(x[0]), int(x[1])]
 # definition of an Infix operator class
 # this recipe also works in jython
 # calling sequence for the infix is either:
