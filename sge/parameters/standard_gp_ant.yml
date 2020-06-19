@@ -1,0 +1,14 @@
+POPSIZE: 1000
+GENERATIONS: 50
+ELITISM: 100                    # number of individuals that survive
+PROB_CROSSOVER: 0.9
+PROB_MUTATION: 0.1
+TSIZE: 3
+GRAMMAR: 'grammars/antgrammar.pybnf'
+EXPERIMENT_NAME: 'dumps/AntTests'
+RUN: 1
+INCLUDE_GENOTYPE: True
+SAVE_STEP: 1
+VERBOSE: True
+MIN_TREE_DEPTH: 5
+MAX_TREE_DEPTH: 17

@@ -9,7 +9,8 @@ from sge.operators.mutation import mutate
 from sge.operators.selection import tournament
 from sge.parameters import (
     params,
-    set_parameters
+    set_parameters,
+    load_parameters
 )
 
 
@@ -35,7 +36,9 @@ def evaluate(ind, eval_func):
     ind['tree_depth'] = tree_depth
 
 
-def setup():
+def setup(parameters_file_path = None):
+    if parameters_file_path is not None:
+        load_parameters(file_name=parameters_file_path)
     set_parameters(sys.argv[1:])
     if params['SEED'] is None:
         params['SEED'] = int(datetime.now().microsecond)
@@ -47,8 +50,8 @@ def setup():
     grammar.set_min_init_tree_depth(params['MIN_TREE_DEPTH'])
 
 
-def evolutionary_algorithm(evaluation_function=None):
-    setup()
+def evolutionary_algorithm(evaluation_function=None, parameters_file=None):
+    setup(parameters_file_path=parameters_file)
     population = list(make_initial_population())
     it = 0
     while it <= params['GENERATIONS']:

@@ -1,6 +1,9 @@
 import argparse
 import yaml
-
+'''
+This was adapted from PonyGE2: https://github.com/PonyGE/PonyGE2
+Fenton, M., McDermott, J., Fagan, D., Forstenlechner, S., Hemberg, E., and O'Neill, M. PonyGE2: Grammatical Evolution in Python. arXiv preprint, arXiv:1703.08535, 2017.
+'''
 """"Algorithm Parameters"""
 params = {'PARAMETERS': None,
           'POPSIZE': 10,
@@ -95,9 +98,7 @@ def set_parameters(arguments):
     # Parse command line arguments using all above information.
     args, _ = parser.parse_known_args(arguments)
 
-    # All default args in the parser are set to "None". Only take arguments
-    # which are not "None", i.e. arguments which have been passed in from
-    # the command line.
+    # All default args in the parser are set to "None".
     cmd_args = {key: value for key, value in vars(args).items() if value is
                 not None}
 
@@ -106,7 +107,6 @@ def set_parameters(arguments):
         # Check all specified arguments.
 
         if type(cmd_args[key]) == str and cmd_args[key].lower() == "none":
-            # Allow for people not using correct capitalisation.
             cmd_args[key] = None
 
     if 'PARAMETERS' in cmd_args:

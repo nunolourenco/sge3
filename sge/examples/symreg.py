@@ -1,5 +1,5 @@
 import random
-from math import sin, cos, tan
+
 from sge.utilities.protected_math import _log_, _div_, _exp_, _inv_, _sqrt_, protdiv
 
 
@@ -129,4 +129,4 @@ class SymbolicRegression():
 if __name__ == "__main__":
     import sge
     eval_func = SymbolicRegression()
-    sge.evolutionary_algorithm(evaluation_function=eval_func)
+    sge.evolutionary_algorithm(evaluation_function=eval_func, parameters_file="parameters/standard.yml")

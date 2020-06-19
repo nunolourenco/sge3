@@ -41,3 +41,9 @@ xz=5.2.4=h1de35cc_4
 yaml=0.1.7=hc338f04_2
 zipp=0.5.2=py_0
 zlib=1.2.11=h1de35cc_3
+
+tqdm~=4.36.1
+numpy~=1.16.4
+sqlalchemy~=1.3.7
+yaml~=0.1.7
+pyyaml~=5.1.1
