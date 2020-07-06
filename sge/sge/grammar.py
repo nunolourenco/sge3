@@ -1,6 +1,7 @@
 import re
 import random
 from sge.utilities import ordered_set
+from sge.utilities.derivation_tree import Tree
 
 
 class Grammar:
@@ -130,6 +131,16 @@ class Grammar:
                 depths.append(self.recursive_individual_creation(genome, sym[0], current_depth + 1))
         return max(depths)
 
+    def random_tree(self, tree, is_grow, current_depth):
+        selected_production = random.choice(self.grammar[tree.node_label])
+        tree.children = []
+        for option in selected_production:
+            if option[1] == self.T:
+                tree.children.append(Tree(option[0]))
+            elif option[1] == self.NT:
+                tree.children.append(Tree(option[0]))
+                self.random_tree(tree.children[-1], is_grow, current_depth + 1)
+
     def mapping(self, mapping_rules, positions_to_map=None, needs_python_filter=False):
         if positions_to_map is None:
             positions_to_map = [0] * len(self.ordered_non_terminals)
@@ -237,8 +248,14 @@ get_non_recursive_options = _inst.get_non_recursive_options
 
 if __name__ == "__main__":
     random.seed(42)
-    g = Grammar("grammars/regression.txt", 9)
-    genome = [[0], [0, 3, 3], [0], [], [1, 1]]
+    g = Grammar()
+    g.set_path("../grammars/regression.pybnf")
+    g.read_grammar()
+    g.set_max_tree_depth(17)
+    g.set_min_init_tree_depth(6)
+    ind = Tree(g.start_rule[0])
+    g.random_tree(ind, True, 0)
+    genome = [[0], [0], [0], [], [1]]
     mapping_numbers = [0] * len(genome)
     print(g.mapping(genome, mapping_numbers, needs_python_filter=True))
 
