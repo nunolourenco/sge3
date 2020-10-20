@@ -48,6 +48,14 @@ Currently this codebase only works with python 3.
 
 To be completed
 
+### Execution
+
+You can run the Symbolic Regression example like this:
+
+```python -m examples.symreg --experiment_name dumps/energy --seed 791021 --parameters parameters/standard.yml```
+
+
+
 ### Support
 
 Any questions, comments or suggestion should be directed to Nuno Lourenço ([naml@dei.uc.pt](mailto:naml@dei.uc.pt))
