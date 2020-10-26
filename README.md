@@ -52,7 +52,7 @@ To be completed
 
 You can run the Symbolic Regression example like this:
 
-```python -m examples.symreg --experiment_name dumps/energy --seed 791021 --parameters parameters/standard.yml```
+```python -m examples.symreg --experiment_name dumps/example --seed 791021 --parameters parameters/standard.yml```
 
 
 
