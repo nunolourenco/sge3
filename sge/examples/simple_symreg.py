@@ -12,12 +12,12 @@ class SimpleSymbolicRegression():
 
     def evaluate(self, individual):
         try:
-            code = compile('result = ' + individual, 'solution', 'exec')
-            globals = {}
-            for i in range(self.fitness_cases):
-                locals = {'x': self.x_points[i]}
-                exec(code, globals, locals)
-                self.x_evals[i] = locals['result']
+            code = compile('result = lambda x: ' + individual, 'solution', 'exec')
+            globals_code = {}
+            locals_code = {}
+            exec(code, globals_code, locals_code)
+            func = locals_code['result']
+            self.x_evals = np.apply_along_axis(func, 0, self.x_points)
             error = np.sum(np.sqrt(np.square(self.x_evals - self.y_points)))
         except (OverflowError, ValueError) as e:
             error = self.invalid_fitness
