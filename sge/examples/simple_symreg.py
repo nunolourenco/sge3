@@ -21,6 +21,8 @@ class SimpleSymbolicRegression():
             error = np.sum(np.sqrt(np.square(self.x_evals - self.y_points)))
         except (OverflowError, ValueError) as e:
             error = self.invalid_fitness
+        if np.isnan(error):
+            error = self.invalid_fitness
         return error, {'generation': 0, "evals": 1}
 
 
