@@ -282,8 +282,10 @@ def gaussian(x):
 def distance_to_point(x,y,center):
   return sqrt(pow(x-center[0],2) + pow(y-center[1],2)) / sqrt(pow(center[0],2) + pow(center[1],2))
 
-def getcenterdistance(x):
-  return distance[int(x[0]), int(x[1])]
+def getcenterdistance(point, img_size):
+  x = ((point[0] + 1) * img_size[0]) / 2
+  y = ((point[1] + 1) * img_size[0]) / 2
+  return distance[int(x), int(y)]
 # definition of an Infix operator class
 # this recipe also works in jython
 # calling sequence for the infix is either:

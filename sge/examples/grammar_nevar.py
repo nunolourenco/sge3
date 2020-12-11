@@ -38,46 +38,23 @@ class Artist:
         images = []
         for ind in tqdm(pop):
             phenotype = ind['phenotype']
-            #print(phenotype)
-            r_function, g_function, b_function = phenotype.split('\n')
-            x, y = np.mgrid[0:img_size[0]:(img_size[0])*1j, 0:img_size[1]:(img_size[1])*1j]
-            pointN = np.vstack((x.flatten(), y.flatten())).T * 1.0
-            r_function = eval(r_function)
-            r = np.apply_along_axis(r_function, 1, pointN) * 1.0
-            r[np.where(np.isnan(r))] = 0.0
-            r[np.where(np.isinf(r))] = 0.0
-            r[np.where(np.abs(r) > 1.0)] /= 255.0
-            r[np.where(np.abs(r) < 1.0)] *= 255.0
-            if r.shape[1] < 2:
-                r = np.hstack((r, np.zeros((r.shape[0], 1))))
-            r = r.mean(axis=1)
-            r = np.reshape(r, img_size)
+            f_ = eval(phenotype)
+            r = np.transpose(np.indices((img_size[0], img_size[1], 3), dtype=np.int), (2, 1, 3, 0))
+            r = r[:, :, :, 0:2]
+            point_n = r.reshape(img_size[0] * img_size[1], 3, 2)
+            x = point_n[:, :, 0]
+            y = point_n[:, :, 1]
+            x = (x / img_size[0]) * 2 - 1
+            y = (y / img_size[1]) * 2 - 1
+            r = f_(x, y)
+            r = np.nan_to_num(r, 1)
+            r[np.where(r < -1.0)] = -1
+            r[np.where(r > 1.0)] = 1
+            r = np.reshape(r, (img_size[0], img_size[0], 3))
 
-            g_function = eval(g_function)
-            g = np.apply_along_axis(g_function, 1, pointN) * 1.0
-            g[np.where(np.isnan(g))] = 0.0
-            g[np.where(np.isinf(g))] = 0.0
-            g[np.where(np.abs(g) > 1.0)] /= 255.0
-            g[np.where(np.abs(g) < 1.0)] *= 255.0
-            if g.shape[1] < 2:
-                g = np.hstack((g, np.zeros((g.shape[0], 1))))
-            g = g.mean(axis=1)
-            g = np.reshape(g, img_size)
+            r = ((r + 1) * 255 / 2).astype(np.uint8)
 
-            b_function = eval(b_function)
-            b = np.apply_along_axis(b_function, 1, pointN) * 1.0
-            b[np.where(np.isnan(b))] = 0.0
-            b[np.where(np.isinf(b))] = 0.0
-            b[np.where(np.abs(b) > 1.0)] /= 255.0
-            b[np.where(np.abs(b) < 1.0)] *= 255.0
-            if b.shape[1] < 2:
-                b = np.hstack((b, np.zeros((b.shape[0], 1))))
-            b = b.mean(axis=1)
-            b = np.reshape(b, img_size)
-
-            striped = np.stack((r, g, b), axis=-1)
-            print((striped.shape))
-            images.append(striped)
+            images.append(r)
         return images
 
     def prepare_inputs(self, point, imgsize):

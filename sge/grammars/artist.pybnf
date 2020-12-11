@@ -1,9 +1,9 @@
 #core
 <start> ::= <a>
-<a> ::=lambda pointN:(<expr>)\nlambda pointN:(<expr>)\nlambda pointN:(<expr>)
+<a> ::=lambda x,y: <expr>
 <expr> ::= <op>(<expr>, <expr>)|(<op>(<expr>, <expr>))|<var>|(<pre_op>(<expr>))
 <op> ::= np.add|np.subtract|np.multiply
 #|\eb_mul_\eb|\eb_div_\eb|\eb_xor_\eb
 <pre_op> ::= np.sin|np.cos
 #_sin_|_cos_|_sinh_|_cosh_
-<var> ::= np.array([pointN[0]/256.0,pointN[1]/256.0])|np.array([getcenterdistance(pointN)])
+<var> ::= x|y|np.array(np.random.uniform(-1, 1, (256*256, 3)))
