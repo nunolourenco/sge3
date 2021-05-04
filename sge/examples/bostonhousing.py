@@ -56,7 +56,7 @@ class BostonHousing():
             try:
                 output = eval(individual, globals(), {"x": case[:-1]})
                 pred_error += (target - output)**2
-            except (ValueError, OverflowError, SyntaxError):
+            except (SyntaxError, ValueError, OverflowError, MemoryError, FloatingPointError):
                 return self.__invalid_fitness
         return pred_error
 
