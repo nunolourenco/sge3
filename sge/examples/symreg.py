@@ -1,5 +1,5 @@
 import random
-
+from numpy import cos, sin
 from sge.utilities.protected_math import _log_, _div_, _exp_, _inv_, _sqrt_, protdiv
 
 
@@ -24,7 +24,6 @@ class SymbolicRegression():
     def calculate_rrse_denominators(self):
         self.__RRSE_train_denominator = 0
         self.__RRSE_test_denominator = 0
-
         train_outputs = [entry[-1] for entry in self.__train_set]
         train_output_mean = float(sum(train_outputs)) / len(train_outputs)
         self.__RRSE_train_denominator = sum([(i - train_output_mean)**2 for i in train_outputs])
@@ -58,13 +57,15 @@ class SymbolicRegression():
             return _log_(inp + (inp**2 + 1)**0.5)
 
         if self.function in ["pagiepolynomial"]:
-            # two variables
-            xx = list(drange(-5,5.4,.4))
-            yy = list(drange(-5,5.4,.4))
-
             function = eval(self.function)
-            zz = map(function, xx, yy)
-            self.__train_set=zip(xx,yy,zz)
+            # two variables
+            l = []
+            for xx in drange(-5,5.4,0.4):
+                for yy in drange(-5,5.4,0.4):
+                    zz = pagiepolynomial(xx,yy)
+                    l.append([xx,yy,zz])
+
+            self.__train_set=l
             self.training_set_size = len(self.__train_set)
             if self.has_test_set:
                 xx = list(drange(-5,5.0,.1))
@@ -72,7 +73,23 @@ class SymbolicRegression():
                 function = eval(self.function)
                 zz = map(function, xx, yy)
 
-                self.__test_set = zip(xx,yy,zz)
+                self.__test_set = [xx,yy,zz]
+                self.test_set_size = len(self.__test_set)
+        elif self.function in ["quarticpolynomial"]:
+            function = eval(self.function)
+            l = []
+            for xx in drange(-1,1.1,0.1):
+                yy = quarticpolynomial(xx)
+                l.append([xx,yy])
+
+            self.__train_set = l
+            self.training_set_size = len(self.__train_set)
+            if self.has_test_set:
+                xx = list(drange(-1,1.1,0.1))
+                function = eval(self.function)
+                yy = map(function, xx)
+
+                self.__test_set = [xx,yy]
                 self.test_set_size = len(self.__test_set)
         else:
             if self.function == "keijzer6":
@@ -92,7 +109,7 @@ class SymbolicRegression():
                 elif self.function == "keijzer9":
                     xx = list(drange(0,101,.1))
                 yy = map(function,xx)
-                self.__test_set = list(zip(xx, yy))
+                self.__test_set = [xx, yy]
                 self.test_set_size = len(self.__test_set)
 
     def get_error(self, individual, dataset):
@@ -113,7 +130,7 @@ class SymbolicRegression():
             return None
 
         error = self.get_error(individual, self.__train_set)
-        error = _sqrt_( error /self.__RRSE_train_denominator);
+        error = _sqrt_( error /self.__RRSE_train_denominator)
 
         if error is None:
             error = self.__invalid_fitness
