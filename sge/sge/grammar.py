@@ -22,6 +22,7 @@ class Grammar:
         self.start_rule = None
         self.max_depth = None
         self.max_init_depth = None
+        self.shortest_path = {}
 
     def set_path(self, grammar_path):
         self.grammar_file = grammar_path
@@ -79,7 +80,41 @@ class Grammar:
                             temp_productions.append(temp_production)
                         if left_side not in self.grammar:
                             self.grammar[left_side] = temp_productions
-        self.compute_non_recursive_options()
+        # self.compute_non_recursive_options()
+        self.find_shortest_path()
+
+    def find_shortest_path(self):
+        for nt in self.grammar.keys():
+            depth = self.minimum_path_calc((nt,'NT'))                    
+            
+    def minimum_path_calc(self, current_symbol):
+        if current_symbol[1] == self.T:
+            return 0
+        else:
+            for derivation_option in self.grammar[current_symbol[0]]:
+                max_depth = 0
+                if current_symbol not in derivation_option:
+                    for symbol in derivation_option:
+
+                        depth = self.minimum_path_calc(symbol)
+                        depth += 1
+                        if depth > max_depth:
+                            max_depth = depth
+
+                    if current_symbol not in self.shortest_path:
+                        self.shortest_path[current_symbol] = [max_depth]
+                        self.shortest_path[current_symbol].append(derivation_option)
+                    else:
+                        if max_depth < self.shortest_path[current_symbol][0]:
+                            self.shortest_path[current_symbol] = [max_depth]
+                            if derivation_option not in self.shortest_path[current_symbol]:
+                                self.shortest_path[current_symbol].append(derivation_option)
+                        if max_depth == self.shortest_path[current_symbol][0]:
+                            if derivation_option not in self.shortest_path[current_symbol]:
+                                self.shortest_path[current_symbol].append(derivation_option)
+
+            return self.shortest_path[current_symbol][0]
+                    
 
     def get_non_terminals(self):
         return self.ordered_non_terminals
@@ -111,14 +146,9 @@ class Grammar:
 
     def recursive_individual_creation(self, genome, symbol, current_depth):
         if current_depth > self.max_init_depth:
-            possibilities = []
-            for index, option in enumerate(self.grammar[symbol]):
-                for s in option:
-                    if s[0] == symbol:
-                        break
-                else:
-                    possibilities.append(index)
-            expansion_possibility = random.choice(possibilities)
+            possibilities = self.shortest_path[(symbol,'NT')][1:]
+            rule = random.choice(possibilities)
+            expansion_possibility = self.grammar[symbol].index(rule)
         else:
             expansion_possibility = random.randint(0, self.count_number_of_options_in_production()[symbol] - 1)
 
@@ -151,14 +181,9 @@ class Grammar:
             if positions_to_map[current_sym_pos] >= len(mapping_rules[current_sym_pos]):
                 if current_depth > self.max_depth:
                     # print "True"
-                    possibilities = []
-                    for index, option in enumerate(self.grammar[current_sym[0]]):
-                        for s in option:
-                            if s[0] == current_sym[0]:
-                                break
-                        else:
-                            possibilities.append(index)
-                    expansion_possibility = random.choice(possibilities)
+                    possibilities = self.shortest_path[current_sym][1:]
+                    rule = random.choice(possibilities)
+                    expansion_possibility = self.grammar[current_sym[0]].index(rule)
                 else:
                     expansion_possibility = random.randint(0, size_of_gene[current_sym[0]] - 1)
                 mapping_rules[current_sym_pos].append(expansion_possibility)
