@@ -17,9 +17,9 @@ def mutate(p, pmutation):
                 current_value = p['genotype'][at_gene][position_to_mutate]
                 choices = []
                 if p['tree_depth'] >= grammar.get_max_depth():
-                    possibilities = grammar.get_shortest_path()[at_gene][1:]
+                    possibilities = grammar.get_shortest_path()[nt][1:]
                     rule = random.choice(possibilities)
-                    expansion_possibility = grammar.get_grammar()[at_gene[0]].index(rule)
+                    expansion_possibility = grammar.get_grammar()[nt].index(rule)
                     p['genotype'][at_gene][position_to_mutate] = expansion_possibility
                 else:
                     choices = list(range(0, size_of_genes[nt]))
