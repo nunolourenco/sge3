@@ -114,7 +114,12 @@ class Grammar:
                                 self.shortest_path[current_symbol].append(derivation_option)
 
             return self.shortest_path[current_symbol][0]
-                    
+
+    def get_shortest_path(self):
+        return self.grammar
+
+    def get_grammar(self):
+        return self.grammar
 
     def get_non_terminals(self):
         return self.ordered_non_terminals
@@ -259,6 +264,8 @@ set_max_tree_depth = _inst.set_max_tree_depth
 set_min_init_tree_depth = _inst.set_min_init_tree_depth
 get_max_depth = _inst.get_max_depth
 get_non_recursive_options = _inst.get_non_recursive_options
+get_grammar = _inst.get_grammar
+get_shortest_path = _inst.get_shortest_path
 
 if __name__ == "__main__":
     random.seed(42)

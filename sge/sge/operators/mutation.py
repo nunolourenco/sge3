@@ -17,11 +17,12 @@ def mutate(p, pmutation):
                 current_value = p['genotype'][at_gene][position_to_mutate]
                 choices = []
                 if p['tree_depth'] >= grammar.get_max_depth():
-                    choices = grammar.get_non_recursive_options()[nt]
+                    possibilities = grammar.get_shortest_path()[at_gene][1:]
+                    rule = random.choice(possibilities)
+                    expansion_possibility = grammar.get_grammar()[at_gene[0]].index(rule)
+                    p['genotype'][at_gene][position_to_mutate] = expansion_possibility
                 else:
                     choices = list(range(0, size_of_genes[nt]))
                     choices.remove(current_value)
-                if len(choices) == 0:
-                    choices = range(0, size_of_genes[nt])
-                p['genotype'][at_gene][position_to_mutate] = random.choice(choices)
+                    p['genotype'][at_gene][position_to_mutate] = random.choice(choices)
     return p
