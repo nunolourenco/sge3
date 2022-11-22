@@ -84,35 +84,35 @@ class Grammar:
         self.find_shortest_path()
 
     def find_shortest_path(self):
+        open_symbols = []
         for nt in self.grammar.keys():
-            depth = self.minimum_path_calc((nt,'NT'))                    
+            depth = self.minimum_path_calc((nt,'NT'), open_symbols)                    
             
-    def minimum_path_calc(self, current_symbol):
+    def minimum_path_calc(self, current_symbol, open_symbols):
         if current_symbol[1] == self.T:
             return 0
         else:
+            open_symbols.append(current_symbol)
             for derivation_option in self.grammar[current_symbol[0]]:
                 max_depth = 0
+                if current_symbol not in self.shortest_path:
+                    self.shortest_path[current_symbol] = [999999]
+                if bool(sum([i in open_symbols for i in derivation_option])):
+                    continue
                 if current_symbol not in derivation_option:
                     for symbol in derivation_option:
-
-                        depth = self.minimum_path_calc(symbol)
+                        depth = self.minimum_path_calc(symbol, open_symbols)
                         depth += 1
                         if depth > max_depth:
                             max_depth = depth
-
-                    if current_symbol not in self.shortest_path:
+                    if max_depth < self.shortest_path[current_symbol][0]:
                         self.shortest_path[current_symbol] = [max_depth]
-                        self.shortest_path[current_symbol].append(derivation_option)
-                    else:
-                        if max_depth < self.shortest_path[current_symbol][0]:
-                            self.shortest_path[current_symbol] = [max_depth]
-                            if derivation_option not in self.shortest_path[current_symbol]:
-                                self.shortest_path[current_symbol].append(derivation_option)
-                        if max_depth == self.shortest_path[current_symbol][0]:
-                            if derivation_option not in self.shortest_path[current_symbol]:
-                                self.shortest_path[current_symbol].append(derivation_option)
-
+                        if derivation_option not in self.shortest_path[current_symbol]:
+                            self.shortest_path[current_symbol].append(derivation_option)
+                    elif max_depth == self.shortest_path[current_symbol][0]:
+                        if derivation_option not in self.shortest_path[current_symbol]:
+                            self.shortest_path[current_symbol].append(derivation_option)
+            open_symbols.remove(current_symbol)
             return self.shortest_path[current_symbol][0]
 
     def get_shortest_path(self):
