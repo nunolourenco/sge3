@@ -8,7 +8,11 @@ import os
 def evolution_progress(generation, pop):
     best=pop[0]
     fitness_samples = [i['fitness'] for i in pop]
-    data = f"{generation};{best['fitness']};{best['genotype']};{best['phenotype']};{best['mutation_probs']};{np.mean(fitness_samples)};{np.std(fitness_samples)};{best['other_info']['test_error']}"
+    if params['META_MUTATION']:
+        data = f"{generation};{best['fitness']};{best['genotype']};{best['phenotype']};{best['mutation_probs']};{np.mean(fitness_samples)};{np.std(fitness_samples)};{best['other_info']['test_error']}"
+    else:
+        data = f"{generation};{best['fitness']};{best['genotype']};{best['phenotype']};{np.mean(fitness_samples)};{np.std(fitness_samples)};{best['other_info']['test_error']}"
+
     if params['VERBOSE']:
         print(data)
     save_progress_to_file(data)
@@ -25,7 +29,10 @@ def save_step(generation, population, num_inds):
     to_save = []
     evenly_spaced_indexes = np.round(np.linspace(0, len(population) - 1, num_inds + 1)).astype(int)[-num_inds:]#first index is best ind which is always recorded so we can exclude it
     for i in np.array(population)[evenly_spaced_indexes]:
-        to_save.append({"fitness": i['fitness'], "phenotype": i['phenotype'], "mutation_probs": i["mutation_probs"]})
+        if params['META_MUTATION']:
+            to_save.append({"fitness": i['fitness'], "phenotype": i['phenotype'], "mutation_probs": i["mutation_probs"]})
+        else:
+            to_save.append({"fitness": i['fitness'], "phenotype": i['phenotype']})
     open('%s/run_%d/iteration_%d.json' % (params['EXPERIMENT_NAME'], params['RUN'], generation), 'a').write(json.dumps(to_save))
 
 def save_parameters():

@@ -1,7 +1,7 @@
 import copy
 import numpy as np
 import sge.grammar as grammar
-
+import random
 
 def mutate(p, pmutation):
     p = copy.deepcopy(p)
@@ -18,13 +18,13 @@ def mutate(p, pmutation):
                 choices = []
                 if p['tree_depth'] >= grammar.get_max_depth():
                     possibilities = grammar.get_shortest_path()[nt][1:]
-                    rule = np.random.choice(possibilities)
+                    rule = random.choice(possibilities)
                     expansion_possibility = grammar.get_grammar()[nt].index(rule)
                     p['genotype'][at_gene][position_to_mutate] = expansion_possibility
                 else:
                     choices = list(range(0, size_of_genes[nt]))
                     choices.remove(current_value)
-                    p['genotype'][at_gene][position_to_mutate] = np.random.choice(choices)
+                    p['genotype'][at_gene][position_to_mutate] = random.choice(choices)
     return p
 
 
@@ -46,12 +46,12 @@ def mutate_level(p):
                 choices = []
                 if p['tree_depth'] >= grammar.get_max_depth():
                     possibilities = grammar.get_shortest_path()[nt][1:]
-                    rule = np.random.choice(possibilities)
+                    rule = random.choice(possibilities)
                     expansion_possibility = grammar.get_grammar()[nt].index(rule)
                     p['genotype'][at_gene][position_to_mutate] = expansion_possibility
                 else:
                     choices = list(range(0, size_of_genes[nt]))
                     choices.remove(current_value)
-                    p['genotype'][at_gene][position_to_mutate] = np.random.choice(choices)
+                    p['genotype'][at_gene][position_to_mutate] = random.choice(choices)
                   
     return p

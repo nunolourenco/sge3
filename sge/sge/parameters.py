@@ -1,5 +1,6 @@
 import argparse
 import yaml
+from distutils.util import strtobool
 '''
 This was adapted from PonyGE2: https://github.com/PonyGE/PonyGE2
 Fenton, M., McDermott, J., Fagan, D., Forstenlechner, S., Hemberg, E., and O'Neill, M. PonyGE2: Grammatical Evolution in Python. arXiv preprint, arXiv:1703.08535, 2017.
@@ -18,12 +19,12 @@ params = {'PARAMETERS': None,
           'RUN': 1,
           'INCLUDE_GENOTYPE': True,
           'SAVE_STEP': 1,
-          'VERBOSE': True,
+          'VERBOSE': False,
           'MIN_TREE_DEPTH': 6,
           'MAX_TREE_DEPTH': 17,
           'META_MUT_RATE': 0.3,
           'META_MUT_EFFECT': 0.01,
-          'META_MUTATION': True,
+          'META_MUTATION': False,
           }
 
 
@@ -87,7 +88,7 @@ def set_parameters(arguments):
                         help='Specifies the run number.')
     parser.add_argument('--include_genotype',
                         dest='INCLUDE_GENOTYPE',
-                        type=bool,
+                        type=strtobool,
                         help='Specifies if the genotype is to be include in the log files.')
     parser.add_argument('--save_step',
                         dest='SAVE_STEP',
@@ -95,7 +96,7 @@ def set_parameters(arguments):
                         help='Specifies how often stats are saved')
     parser.add_argument('--verbose',
                         dest='VERBOSE',
-                        type=bool,
+                        type=strtobool,
                         help='Turns on the verbose output of the program')
     parser.add_argument('--prob_mutation_probs',
                         dest='META_MUT_RATE',
@@ -109,6 +110,10 @@ def set_parameters(arguments):
                         dest='META_MUT_EFFECT',
                         type=float,
                         help='Specifies the value of the standard deviation used in the generation of a number with a normal distribution (alias for --meta_mut_effect)')
+    parser.add_argument('--meta_mutation',
+                        dest='META_MUTATION',
+                        type=strtobool,
+                        help='If set to true, it uses meta mutation, otherwise standard mutation is used.')
     parser.add_argument('--meta_mut_effect',
                         dest='META_MUT_EFFECT',
                         type=float,
@@ -127,7 +132,6 @@ def set_parameters(arguments):
 
         if type(cmd_args[key]) == str and cmd_args[key].lower() == "none":
             cmd_args[key] = None
-
     if 'PARAMETERS' in cmd_args:
         load_parameters(cmd_args['PARAMETERS'])
     params.update(cmd_args)
