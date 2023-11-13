@@ -1,5 +1,6 @@
 import argparse
 import yaml
+from distutils.util import strtobool
 '''
 This was adapted from PonyGE2: https://github.com/PonyGE/PonyGE2
 Fenton, M., McDermott, J., Fagan, D., Forstenlechner, S., Hemberg, E., and O'Neill, M. PonyGE2: Grammatical Evolution in Python. arXiv preprint, arXiv:1703.08535, 2017.
@@ -84,7 +85,7 @@ def set_parameters(arguments):
                         help='Specifies the run number.')
     parser.add_argument('--include_genotype',
                         dest='INCLUDE_GENOTYPE',
-                        type=bool,
+                        type=strtobool,
                         help='Specifies if the genotype is to be include in the log files.')
     parser.add_argument('--save_step',
                         dest='SAVE_STEP',
@@ -92,7 +93,7 @@ def set_parameters(arguments):
                         help='Specifies how often stats are saved')
     parser.add_argument('--verbose',
                         dest='VERBOSE',
-                        type=bool,
+                        type=strtobool,
                         help='Turns on the verbose output of the program')
 
     # Parse command line arguments using all above information.
