@@ -11,7 +11,7 @@ def drange(start, stop, step):
 
 
 class SymbolicRegression():
-    def __init__(self, function="quarticpolynomial", has_test_set=False, invalid_fitness=9999999):
+    def __init__(self, function="pagiepolynomial", has_test_set=False, invalid_fitness=9999999):
         self.__train_set = []
         self.__test_set = None
         self.__number_of_variables = 1

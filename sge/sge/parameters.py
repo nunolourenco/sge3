@@ -21,6 +21,9 @@ params = {'PARAMETERS': None,
           'VERBOSE': True,
           'MIN_TREE_DEPTH': 6,
           'MAX_TREE_DEPTH': 17,
+          'META_MUT_RATE': 0.3,
+          'META_MUT_EFFECT': 0.01,
+          'META_MUTATION': True,
           }
 
 
@@ -94,6 +97,22 @@ def set_parameters(arguments):
                         dest='VERBOSE',
                         type=bool,
                         help='Turns on the verbose output of the program')
+    parser.add_argument('--prob_mutation_probs',
+                        dest='META_MUT_RATE',
+                        type=float,
+                        help='Specifies the probability of the proability of mutation changing for a given rule (alias for --meta_mut_rate)')
+    parser.add_argument('--meta_mut_rate',
+                        dest='META_MUT_RATE',
+                        type=float,
+                        help='Specifies the probability of the proability of mutation changing for a given rule (alias for --prob_mutation_probs)')
+    parser.add_argument('--gauss_sd',
+                        dest='META_MUT_EFFECT',
+                        type=float,
+                        help='Specifies the value of the standard deviation used in the generation of a number with a normal distribution (alias for --meta_mut_effect)')
+    parser.add_argument('--meta_mut_effect',
+                        dest='META_MUT_EFFECT',
+                        type=float,
+                        help='Specifies the value of the standard deviation used in the generation of a number with a normal distribution (alias for --gauss_sd)')
 
     # Parse command line arguments using all above information.
     args, _ = parser.parse_known_args(arguments)
