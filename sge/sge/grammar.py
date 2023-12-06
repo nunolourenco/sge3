@@ -116,7 +116,7 @@ class Grammar:
             return self.shortest_path[current_symbol][0]
 
     def get_shortest_path(self):
-        return self.grammar
+        return self.shortest_path
 
     def get_grammar(self):
         return self.grammar
