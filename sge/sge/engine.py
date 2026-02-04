@@ -25,6 +25,17 @@ def make_initial_population():
         yield generate_random_individual()
 
 
+def map_individual(ind):
+    """
+    Maps the genotype to phenotype and stores auxiliary info.
+    """
+    mapping_values = [0 for i in ind['genotype']]
+    phen, tree_depth = grammar.mapping(ind['genotype'], mapping_values)
+    ind['phenotype'] = phen
+    ind['mapping_values'] = mapping_values
+    ind['tree_depth'] = tree_depth
+
+
 def evaluate(ind, eval_func):
     mapping_values = [0 for i in ind['genotype']]
     phen, tree_depth = grammar.mapping(ind['genotype'], mapping_values)
@@ -55,11 +66,37 @@ def evolutionary_algorithm(evaluation_function=None, parameters_file=None):
     population = list(make_initial_population())
     it = 0
     while it <= params['GENERATIONS']:
-        for i in tqdm(population):
-            if i['fitness'] is None:
-                evaluate(i, evaluation_function)
-        population.sort(key=lambda x: x['fitness'])
+        # 1. Identify individuals that need evaluation
+        to_evaluate = [ind for ind in population if ind['fitness'] is None]
+        # 2. Map Genotypes to Phenotypes for all of them
+        for ind in to_evaluate:
+            map_individual(ind)
+        #Batch vs Single
+        if to_evaluate:
+            phenotypes = [ind['phenotype'] for ind in to_evaluate]
+            try:
+                # --- ATTEMPT BATCH EVALUATION ---
+                # Try passing the whole list of phenotypes to the evaluator
+                results = evaluation_function.evaluate(phenotypes)
+                
+                # Check if the result is valid (must be a list of same length as input)
+                if isinstance(results, (list, tuple)) and len(results) == len(to_evaluate):
+                    # Assign results from batch
+                    for ind, res in zip(to_evaluate, results):
+                        ind['fitness'] = res[0]
+                        ind['other_info'] = res[1]
+                else:
+                    # If result isn't a list or wrong length, force fallback
+                    raise ValueError("Batch evaluation returned invalid format.")
 
+            except (AttributeError, TypeError, ValueError, Exception):
+                # --- FALLBACK TO SINGLE EVALUATION ---
+                # If batch fails (e.g. function expects single item), loop manually
+                for ind in tqdm(to_evaluate):
+                    quality, other_info = evaluation_function.evaluate(ind['phenotype'])
+                    ind['fitness'] = quality
+                    ind['other_info'] = other_info
+        population.sort(key=lambda x: x['fitness'])
         logger.evolution_progress(it, population)
         new_population = population[:params['ELITISM']]
         while len(new_population) < params['POPSIZE']:
