@@ -123,6 +123,9 @@ class Grammar:
 
     def get_non_terminals(self):
         return self.ordered_non_terminals
+    
+    def get_terminals(self):
+        return self.terminals
 
     def count_number_of_options_in_production(self):
         if self.number_of_options_by_non_terminal is None:
@@ -150,7 +153,7 @@ class Grammar:
         return non_recursive_elements
 
     def recursive_individual_creation(self, genome, symbol, current_depth):
-        if current_depth > self.max_init_depth:
+        if current_depth > (self.max_init_depth - self.shortest_path[(symbol,'NT')][0]):
             possibilities = self.shortest_path[(symbol,'NT')][1:]
             rule = random.choice(possibilities)
             expansion_possibility = self.grammar[symbol].index(rule)
@@ -172,7 +175,7 @@ class Grammar:
         max_depth = self._recursive_mapping(mapping_rules, positions_to_map, self.start_rule, 0, output)
         output = "".join(output)
         if self.grammar_file.endswith("pybnf"):
-            output = self.python_filter(output)
+            output = self.python_filter(output, needs_python_filter)
         return output, max_depth
 
     def _recursive_mapping(self, mapping_rules, positions_to_map, current_sym, current_depth, output):
@@ -184,8 +187,7 @@ class Grammar:
             choices = self.grammar[current_sym[0]]
             size_of_gene = self.count_number_of_options_in_production()
             if positions_to_map[current_sym_pos] >= len(mapping_rules[current_sym_pos]):
-                if current_depth > self.max_depth:
-                    # print "True"
+                if current_depth >= (self.max_depth - self.shortest_path[current_sym][0]):
                     possibilities = self.shortest_path[current_sym][1:]
                     rule = random.choice(possibilities)
                     expansion_possibility = self.grammar[current_sym[0]].index(rule)
@@ -201,7 +203,7 @@ class Grammar:
         return max(depths)
 
     @staticmethod
-    def python_filter(txt):
+    def python_filter(txt, needs_python_filter):
         """ Create correct python syntax.
         We use {: and :} as special open and close brackets, because
         it's not possible to specify indentation correctly in a BNF
@@ -211,21 +213,22 @@ class Grammar:
         txt = txt.replace("\l", "<")
         txt = txt.replace("\g", ">")
         txt = txt.replace("\eb", "|")
-        indent_level = 0
-        tmp = txt[:]
-        i = 0
-        while i < len(tmp):
-            tok = tmp[i:i+2]
-            if tok == "{:":
-                indent_level += 1
-            elif tok == ":}":
-                indent_level -= 1
-            tabstr = "\n" + "  " * indent_level
-            if tok == "{:" or tok == ":}" or tok == "\\n":
-                tmp = tmp.replace(tok, tabstr, 1)
-            i += 1
-            # Strip superfluous blank lines.
-            txt = "\n".join([line for line in tmp.split("\n") if line.strip() != ""])
+        if needs_python_filter:
+            indent_level = 0
+            tmp = txt[:]
+            i = 0
+            while i < len(tmp):
+                tok = tmp[i:i+2]
+                if tok == "{:":
+                    indent_level += 1
+                elif tok == ":}":
+                    indent_level -= 1
+                tabstr = "\n" + "  " * indent_level
+                if tok == "{:" or tok == ":}" or tok == "\\n":
+                    tmp = tmp.replace(tok, tabstr, 1)
+                i += 1
+                # Strip superfluous blank lines.
+                txt = "\n".join([line for line in tmp.split("\n") if line.strip() != ""])
         return txt
 
     def get_start_rule(self):
@@ -254,11 +257,13 @@ _inst = Grammar()
 set_path = _inst.set_path
 read_grammar = _inst.read_grammar
 get_non_terminals = _inst.get_non_terminals
+get_terminals = _inst.get_terminals
 count_number_of_options_in_production = _inst.count_number_of_options_in_production
 compute_non_recursive_options = _inst.compute_non_recursive_options
 list_non_recursive_productions = _inst.list_non_recursive_productions
 recursive_individual_creation = _inst.recursive_individual_creation
 mapping = _inst.mapping
+mapping_with_array = _inst.mapping_with_array
 start_rule = _inst.get_start_rule
 set_max_tree_depth = _inst.set_max_tree_depth
 set_min_init_tree_depth = _inst.set_min_init_tree_depth
