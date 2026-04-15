@@ -1,0 +1,6 @@
+#core
+<start> ::= <expr>
+<expr> ::= <op>(<expr>,<expr>)|(<op>(<expr>,<expr>))|<pre_op>(<expr>)|<var>
+<op> ::= node_add|node_sub|node_mul|node_div
+<pre_op> ::= node_sin|node_cos|node_exp|node_log|node_inv
+<var> ::= x[0]|node_tensor(1.0)
