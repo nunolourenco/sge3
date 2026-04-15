@@ -1,4 +1,4 @@
-import random
+import numpy as np
 import sys
 import sge.grammar as grammar
 import sge.logger as logger
@@ -15,18 +15,18 @@ from sge.parameters import (
 
 
 def generate_random_individual():
-    genotype = [[] for key in grammar.get_non_terminals()]
+    genotype = [[] for _ in grammar.get_non_terminals()]
     tree_depth = grammar.recursive_individual_creation(genotype, grammar.start_rule()[0], 0)
     return {'genotype': genotype, 'fitness': None, 'tree_depth' : tree_depth}
 
 
 def make_initial_population():
-    for i in range(params['POPSIZE']):
+    for _ in range(params['POPSIZE']):
         yield generate_random_individual()
 
 
 def evaluate(ind, eval_func):
-    mapping_values = [0 for i in ind['genotype']]
+    mapping_values = [0 for _ in ind['genotype']]
     phen, tree_depth = grammar.mapping(ind['genotype'], mapping_values)
     quality, other_info = eval_func.evaluate(phen)
     ind['phenotype'] = phen
@@ -43,11 +43,11 @@ def setup(parameters_file_path = None):
     if params['SEED'] is None:
         params['SEED'] = int(datetime.now().microsecond)
     logger.prepare_dumps()
-    random.seed(params['SEED'])
+    np.random.seed(int(params['SEED']))
     grammar.set_path(params['GRAMMAR'])
-    grammar.read_grammar()
     grammar.set_max_tree_depth(params['MAX_TREE_DEPTH'])
     grammar.set_min_init_tree_depth(params['MIN_TREE_DEPTH'])
+    grammar.read_grammar()
 
 
 def evolutionary_algorithm(evaluation_function=None, parameters_file=None):
@@ -63,7 +63,7 @@ def evolutionary_algorithm(evaluation_function=None, parameters_file=None):
         logger.evolution_progress(it, population)
         new_population = population[:params['ELITISM']]
         while len(new_population) < params['POPSIZE']:
-            if random.random() < params['PROB_CROSSOVER']:
+            if np.random.uniform() < params['PROB_CROSSOVER']:
                 p1 = tournament(population, params['TSIZE'])
                 p2 = tournament(population, params['TSIZE'])
                 ni = crossover(p1, p2)
