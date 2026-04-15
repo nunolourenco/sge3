@@ -1,5 +1,5 @@
 import re
-import random
+import numpy as np
 from sge.utilities import ordered_set
 
 
