@@ -30,30 +30,79 @@ This project corresponds to a new implementation of the SGE engine. SGE has been
 As in for the SGE framework we provide the implementations of some problems that we used to test the DSGE. Extending it to your own needs should be fairly easy. 
 
 
-When running the framework a folder called *dumps* will be created together with an additional one that corresponds
- to the experience. Inside, there will be directories for each run. Each run folder contains snapshots of the
-  population at a given generation, and a file called *progress_report.csv*,  which is updated during the
-   evolutionary run
-  . By default we take snapshots
-   of the population every iteration (SAVESTEP parameter in the configuration file). This can be changed, together with
-    all
-    the numeric values in the
-    *configs
-   * folder.
+When running the framework a folder called *dumps* will be created together with an additional one that corresponds to the experience. Inside, there will be directories for each run. Each run folder contains snapshots of the population at a given generation, and a file called *progress_report.csv*,  which is updated during the evolutionary run. By default we take snapshots of the population every iteration (SAVESTEP parameter in the configuration file). This can be changed, together with all the numeric values in the *configs* folder.
 
 ### Requirements
-Currently this codebase only works with python 3. 
+This code requires Python 3.11 or newer. The following dependencies are needed:
+- numpy
+- pandas
+- torch
+- pyyaml
+- tqdm
 
 ### Installation
 
-To be completed
+The project uses a `pyproject.toml` file for dependency management and configuration.
+
+#### Using Poetry
+1. Install Poetry if you haven't already: `curl -sSL https://install.python-poetry.org | python3 -`
+2. Navigate to the `sge` directory: `cd sge`
+3. Install dependencies: `poetry install`
+
+#### Using venv
+1. Create a virtual environment: `python -m venv venv`
+2. Activate the virtual environment: `source venv/bin/activate` (on Linux/Mac) or `venv\Scripts\activate` (on Windows)
+3. Navigate to the `sge` directory: `cd sge`
+4. Install the package in editable mode: `pip install -e .`
 
 ### Execution
 
-You can run the Symbolic Regression example like this:
+To run the algorithm you need a **grammar** and a **fitness function**.
+The folder `examples/` contains the code for some benchmark problems used in Genetic Programming, and the folder ``grammars/`` contain the respective grammars. To run, for example, a Symbolic Regression problem, you can use the following command:
 
 ```python -m examples.symreg --experiment_name dumps/example --seed 791021 --parameters parameters/standard.yml```
 
+
+#### Parameters
+
+The folder `parameters/` contains an example of standard parameters to run. You can define the parameters on a file and specify them when executing the code. For example:
+
+```
+python3 -m examples.symreg --grammar grammars/regression.pybnf --parameters parameters/standard.yml
+```
+
+You can also add manually more parameters when calling the code without changing the parameter file. Here is an example where we define the seed:
+
+```
+python3 -m examples.symreg --grammar grammars/regression.pybnf --parameters parameters/standard.yml --seed 123
+```
+
+If you need to know the possible parameters, you can use the flag ``--help``. For example:
+
+```
+python -m examples.symreg --help
+```
+
+Here is the list of possible parameters, and how to call them.
+
+| argument | type | description |
+| --------------- | ----------- | ------------ |
+| --parameters | str | Specifies the parameters file to be used. Must include the full file extension. | 
+| --popsize | int | Specifies the population size. |
+| --generations | int | Specifies the total number of generations.
+| --elitism | int | Specifies the total number of individuals that should survive in each generation. |
+| --prob_crossover | float | Specifies the probability of crossover usage. Float required. |
+| --prob_mutation | float | Specifies the probability of mutation usage. Float required. |
+| --tsize | int | Specifies the tournament size for parent selection. |
+| --min_tree_depth | int | Specifies the initialisation tree depth. |
+| --max_tree_depth | int | Specifies the maximum tree depth. |
+| --grammar | str | specifies the path to the grammar file. |
+| --experiment_name | str | Specifies the name of the folder where stats are going to be stored. |
+| --run | int | Specifies the run number. |
+| --seed | float | Specifies the seed to be used by the random number generator. |
+| --include_genotype | bool | Specifies if the genotype is to be included in the log files |
+| --save_step | int | Specifies how often stats are saved. |
+| --verbose | bool | Turns on the verbose output of the program. |
 
 
 ### Support
