@@ -265,6 +265,7 @@ compute_non_recursive_options = _inst.compute_non_recursive_options
 list_non_recursive_productions = _inst.list_non_recursive_productions
 recursive_individual_creation = _inst.recursive_individual_creation
 mapping = _inst.mapping
+mapping_with_array = _inst.mapping_with_array
 start_rule = _inst.get_start_rule
 set_max_tree_depth = _inst.set_max_tree_depth
 set_min_init_tree_depth = _inst.set_min_init_tree_depth

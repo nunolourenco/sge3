@@ -3,7 +3,6 @@ try:
 except ImportError:
     from collections import MutableSet
 
-
 class OrderedSet(MutableSet):
     """
     From http://code.activestate.com/recipes/528878-ordered-set/
