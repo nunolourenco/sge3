@@ -58,7 +58,7 @@ class Multiplexer_11:
             res = variables['res']
             if res == outputs[i]:
                 error -= 1
-        return (error, {})
+        return (error, {'generation': 0, "evals": 1, "test_error": 0.0})
 
 
 if __name__ == "__main__":

@@ -1,11 +1,11 @@
-import random
+import numpy
 import sge.grammar as grammar
 
 
 def crossover(p1, p2):
     xover_p_value = 0.5
     gen_size = len(p1['genotype'])
-    mask = [random.random() for i in range(gen_size)]
+    mask = [numpy.random.uniform() for i in range(gen_size)]
     genotype = []
     for index, prob in enumerate(mask):
         if prob < xover_p_value:

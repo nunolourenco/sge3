@@ -146,7 +146,7 @@ class AntSimulator:
             try:
                 self.routine()
             except SyntaxError:
-                print("SYNTAX ERROR:\n"+self.routine)
+                print("SYNTAX ERROR:\nNeeds python filter"+self.routine)
                 exit(0)
 
     def runstring(self,routine,callable_ = False):

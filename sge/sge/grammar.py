@@ -1,5 +1,5 @@
 import re
-import random
+import numpy as np
 from sge.utilities import ordered_set
 
 
@@ -80,7 +80,6 @@ class Grammar:
                             temp_productions.append(temp_production)
                         if left_side not in self.grammar:
                             self.grammar[left_side] = temp_productions
-        # self.compute_non_recursive_options()
         self.find_shortest_path()
 
     def find_shortest_path(self):
@@ -153,14 +152,16 @@ class Grammar:
         return non_recursive_elements
 
     def recursive_individual_creation(self, genome, symbol, current_depth):
-        if current_depth > (self.max_init_depth - self.shortest_path[(symbol,'NT')][0]):
+        if current_depth >= (self.max_init_depth - self.shortest_path[(symbol,'NT')][0]):
             possibilities = self.shortest_path[(symbol,'NT')][1:]
-            rule = random.choice(possibilities)
+            rule = possibilities[np.random.randint(0, len(possibilities))]
+            # rule = np.random.choice(possibilities)
             expansion_possibility = self.grammar[symbol].index(rule)
         else:
-            expansion_possibility = random.randint(0, self.count_number_of_options_in_production()[symbol] - 1)
+            number_expansions = self.count_number_of_options_in_production()[symbol]
+            expansion_possibility = np.random.randint(0, number_expansions)
 
-        genome[self.get_non_terminals().index(symbol)].append(expansion_possibility)
+        genome[self.get_non_terminals().index(symbol)].append([expansion_possibility, current_depth])
         expansion_symbols = self.grammar[symbol][expansion_possibility]
         depths = [current_depth]
         for sym in expansion_symbols:
@@ -185,16 +186,17 @@ class Grammar:
         else:
             current_sym_pos = self.ordered_non_terminals.index(current_sym[0])
             choices = self.grammar[current_sym[0]]
-            size_of_gene = self.count_number_of_options_in_production()
+            size_of_gene = self.count_number_of_options_in_production()     
             if positions_to_map[current_sym_pos] >= len(mapping_rules[current_sym_pos]):
                 if current_depth >= (self.max_depth - self.shortest_path[current_sym][0]):
                     possibilities = self.shortest_path[current_sym][1:]
-                    rule = random.choice(possibilities)
+                    rule = possibilities[np.random.randint(0, len(possibilities))]
                     expansion_possibility = self.grammar[current_sym[0]].index(rule)
                 else:
-                    expansion_possibility = random.randint(0, size_of_gene[current_sym[0]] - 1)
-                mapping_rules[current_sym_pos].append(expansion_possibility)
-            current_production = mapping_rules[current_sym_pos][positions_to_map[current_sym_pos]]
+                    expansion_possibility = np.random.randint(0, size_of_gene[current_sym[0]])
+                mapping_rules[current_sym_pos].append([expansion_possibility, current_depth])
+            
+            current_production = mapping_rules[current_sym_pos][positions_to_map[current_sym_pos]][0]
             positions_to_map[current_sym_pos] += 1
             next_to_expand = choices[current_production]
             for next_sym in next_to_expand:
@@ -273,7 +275,7 @@ get_grammar = _inst.get_grammar
 get_shortest_path = _inst.get_shortest_path
 
 if __name__ == "__main__":
-    random.seed(42)
+    np.random.seed(42)
     g = Grammar("grammars/regression.txt", 9)
     genome = [[0], [0, 3, 3], [0], [], [1, 1]]
     mapping_numbers = [0] * len(genome)
